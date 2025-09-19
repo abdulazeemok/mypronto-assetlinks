@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "net.prontobroadband.mypronto",
+      "sha256_cert_fingerprints": [
+        "5B6C481B06B5F14128382367FDC88759AF15134E8A2E946E2A59222B169FEF16"
+      ]
+    }
+  }
+]
+
+
