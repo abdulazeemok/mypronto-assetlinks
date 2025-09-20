@@ -23,12 +23,14 @@
             max-width: 500px;
         }
         .logo {
-            width: 120px;
+            width: 150px;
             margin-bottom: 20px;
+            border-radius: 8px;
         }
         h1 {
             color: #00AEEF;
             margin-bottom: 20px;
+            font-size: 24px;
         }
         .loading {
             margin: 20px 0;
@@ -44,9 +46,11 @@
             border-radius: 25px;
             font-weight: bold;
             display: inline-block;
+            transition: background-color 0.3s ease;
         }
         .manual-link:hover {
             background-color: #0099cc;
+            text-decoration: none;
         }
         .app-store-links {
             margin-top: 30px;
@@ -61,12 +65,19 @@
             text-decoration: none;
             border-radius: 5px;
             color: #333;
+            transition: background-color 0.3s ease;
+        }
+        .store-link:hover {
+            background-color: #e0e0e0;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://asset/wp-content/logo.png" alt="Pronto Broadband Logo" class="logo">
+        <a href="https://www.prontobroadband.com" target="_blank">
+            <img src="https://www.prontobroadband.net/asset/wp-content/logo.png" alt="Pronto Broadband Logo" class="logo">
+        </a>
         <h1>MyPronto Password Reset</h1>
         <div class="loading">Redirecting to the MyPronto app...</div>
         <a href="#" class="manual-link" id="manualLink">Open in MyPronto App</a>
