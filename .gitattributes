@@ -1,2 +1,3 @@
+*.json linguist-language=JSON
 apple-app-site-association text/plain
 /.well-known/apple-app-site-association text/plain
