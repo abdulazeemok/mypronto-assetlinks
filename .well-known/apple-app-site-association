@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "LQFMLQ9JHG.net.prontobroadband.mypronto",
+        "paths": [
+          "/reset-password/*",
+          "/tab/*",
+          "/transactions/*",
+          "/notifications*",
+          "/*"
+        ]
+      }
+    ]
+  }
+}
