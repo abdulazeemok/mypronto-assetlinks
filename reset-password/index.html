@@ -58,6 +58,8 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
         }
         .store-link {
             padding: 10px 20px;
@@ -66,6 +68,7 @@
             border-radius: 5px;
             color: #333;
             transition: background-color 0.3s ease;
+            margin: 5px 0;
         }
         .store-link:hover {
             background-color: #e0e0e0;
@@ -79,12 +82,13 @@
             <img src="https://www.prontobroadband.net/asset/wp-content/logo.png" alt="Pronto Broadband Logo" class="logo">
         </a>
         <h1>MyPronto Password Reset</h1>
-        <div class="loading">Redirecting to the MyPronto app...</div>
-        <a href="#" class="manual-link" id="manualLink">Open in MyPronto App</a>
+        <div class="loading">Preparing your reset link...</div>
+        <a href="#" class="manual-link" id="manualLink" style="display: none;">Open in MyPronto App</a>
         
         <div class="app-store-links">
             <div>If you don't have the app:</div>
             <a href="https://play.google.com/store/apps/details?id=net.prontobroadband.mypronto" class="store-link">Get it on Google Play</a>
+            <!-- iOS App Store link will be added dynamically if needed -->
         </div>
     </div>
 
@@ -93,32 +97,51 @@
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const uid = urlParams.get('uid');
-        
-        if (token && uid) {
-            // Construct the deep link
+
+        const manualLink = document.getElementById('manualLink');
+        const loadingEl = document.querySelector('.loading');
+        const appStoreLinksDiv = document.querySelector('.app-store-links');
+
+        if (!token || !uid) {
+            loadingEl.textContent = 'Invalid reset link parameters';
+            loadingEl.style.color = 'red';
+            manualLink.style.display = 'none';
+        } else {
             const deepLink = `mypronto://reset-password?token=${encodeURIComponent(token)}&uid=${encodeURIComponent(uid)}`;
             
-            // Try to open the deep link automatically
-            window.location.href = deepLink;
-            
-            // Set up the manual link
-            document.getElementById('manualLink').href = deepLink;
-            document.getElementById('manualLink').addEventListener('click', function(e) {
+            // Set up manual link
+            manualLink.href = deepLink;
+            manualLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 window.location.href = deepLink;
             });
+
+            // Detect iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             
-            // If the app doesn't open, show app store links after 3 seconds
-            setTimeout(function() {
-                if (document.hidden || document.visibilityState === 'hidden') {
-                    // Page is hidden, likely because app opened
-                    return;
-                }
-            }, 3000);
-        } else {
-            document.querySelector('.loading').textContent = 'Invalid reset link parameters';
-            document.querySelector('.loading').style.color = 'red';
-            document.getElementById('manualLink').style.display = 'none';
+            if (isIOS) {
+                // On iOS: require user tap
+                loadingEl.textContent = 'Tap the button below to open the MyPronto app';
+                manualLink.style.display = 'inline-block';
+                
+                // After a short delay, show App Store link (in case app isn't installed)
+                setTimeout(() => {
+                    // Only show if user hasn't left the page
+                    if (document.visibilityState !== 'hidden') {
+                        const iosLink = document.createElement('a');
+                        iosLink.href = 'https://apps.apple.com/app/id6477683969'; // 👈 REPLACE WITH YOUR ACTUAL APP ID
+                        iosLink.className = 'store-link';
+                        iosLink.textContent = 'Download on the App Store';
+                        iosLink.style.marginTop = '10px';
+                        appStoreLinksDiv.appendChild(iosLink);
+                    }
+                }, 3000);
+            } else {
+                // On Android: auto-redirect
+                loadingEl.textContent = 'Redirecting to the MyPronto app...';
+                window.location.href = deepLink;
+                manualLink.style.display = 'inline-block';
+            }
         }
     </script>
 </body>
