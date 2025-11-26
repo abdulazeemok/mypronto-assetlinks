@@ -54,12 +54,17 @@
         }
         .app-store-links {
             margin-top: 30px;
+        }
+        .app-store-links > div:first-child {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+        .store-links {
             display: flex;
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
-            flex-direction: column;
-            align-items: center;
         }
         .store-link {
             padding: 10px 20px;
@@ -68,7 +73,7 @@
             border-radius: 5px;
             color: #333;
             transition: background-color 0.3s ease;
-            margin: 5px 0;
+            min-width: 180px;
         }
         .store-link:hover {
             background-color: #e0e0e0;
@@ -87,20 +92,20 @@
         
         <div class="app-store-links">
             <div>If you don't have the app:</div>
-            <a href="https://play.google.com/store/apps/details?id=net.prontobroadband.mypronto" class="store-link">Get it on Google Play</a>
-            <!-- iOS App Store link will be added dynamically if needed -->
+            <div class="store-links">
+                <a href="https://play.google.com/store/apps/details?id=net.prontobroadband.mypronto" class="store-link">Get it on Google Play</a>
+                <a href="https://apps.apple.com/app/id6753793396" class="store-link">Download on the App Store</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const uid = urlParams.get('uid');
 
         const manualLink = document.getElementById('manualLink');
         const loadingEl = document.querySelector('.loading');
-        const appStoreLinksDiv = document.querySelector('.app-store-links');
 
         if (!token || !uid) {
             loadingEl.textContent = 'Invalid reset link parameters';
@@ -109,35 +114,18 @@
         } else {
             const deepLink = `mypronto://reset-password?token=${encodeURIComponent(token)}&uid=${encodeURIComponent(uid)}`;
             
-            // Set up manual link
             manualLink.href = deepLink;
             manualLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 window.location.href = deepLink;
             });
 
-            // Detect iOS
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            
+
             if (isIOS) {
-                // On iOS: require user tap
-                loadingEl.textContent = 'Tap the button below to open the MyPronto app';
+                loadingEl.textContent = 'Tap below to open in the MyPronto app';
                 manualLink.style.display = 'inline-block';
-                
-                // After a short delay, show App Store link (in case app isn't installed)
-                setTimeout(() => {
-                    // Only show if user hasn't left the page
-                    if (document.visibilityState !== 'hidden') {
-                        const iosLink = document.createElement('a');
-                        iosLink.href = 'https://apps.apple.com/app/id6477683969'; // 👈 REPLACE WITH YOUR ACTUAL APP ID
-                        iosLink.className = 'store-link';
-                        iosLink.textContent = 'Download on the App Store';
-                        iosLink.style.marginTop = '10px';
-                        appStoreLinksDiv.appendChild(iosLink);
-                    }
-                }, 3000);
             } else {
-                // On Android: auto-redirect
                 loadingEl.textContent = 'Redirecting to the MyPronto app...';
                 window.location.href = deepLink;
                 manualLink.style.display = 'inline-block';
